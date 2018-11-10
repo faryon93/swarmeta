@@ -21,8 +21,8 @@ package model
 // ---------------------------------------------------------------------------------------
 
 import (
-    "bytes"
-    "html/template"
+	"bytes"
+	"text/template"
 )
 
 // ---------------------------------------------------------------------------------------
@@ -30,12 +30,12 @@ import (
 // ---------------------------------------------------------------------------------------
 
 type View struct {
-    // populated by hcl
-    Metadata map[string]*Metadata `json:"metadata"`
-    Labels   bool                 `json:"labels"`
+	// populated by hcl
+	Metadata map[string]*Metadata `json:"metadata"`
+	Labels   bool                 `json:"labels"`
 
-    // internal variables
-    IsOkay bool `hcl:"-" json:"-"`
+	// internal variables
+	IsOkay bool `hcl:"-" json:"-"`
 }
 
 // ---------------------------------------------------------------------------------------
@@ -44,38 +44,38 @@ type View struct {
 
 // Initialize initializes (creates templates, ...) this View.
 func (v *View) Initialize() error {
-    // compile all metadata templates
-    for metaName, meta := range v.Metadata {
-        var err error
+	// compile all metadata templates
+	for metaName, meta := range v.Metadata {
+		var err error
 
-        meta.template, err = template.New(metaName).Parse(meta.TemplateSrc)
-        if err != nil {
-            return err
-        }
-    }
+		meta.template, err = template.New(metaName).Parse(meta.TemplateSrc)
+		if err != nil {
+			return err
+		}
+	}
 
-    v.IsOkay = true
+	v.IsOkay = true
 
-    return nil
+	return nil
 }
 
 // Render renders this view with the given object.
 func (v *View) Render(obj interface{}) (map[string]string, error) {
-    metadata := make(map[string]string)
+	metadata := make(map[string]string)
 
-    for name, meta := range v.Metadata {
-        // render the template to a buffer
-        var doc bytes.Buffer
-        err := meta.template.Execute(&doc, obj)
-        if err != nil {
-            return nil, err
-        }
+	for name, meta := range v.Metadata {
+		// render the template to a buffer
+		var doc bytes.Buffer
+		err := meta.template.Execute(&doc, obj)
+		if err != nil {
+			return nil, err
+		}
 
-        value := string(doc.Bytes())
-        if !meta.OmitEmpty || value != "" {
-            metadata[name] = value
-        }
-    }
+		value := string(doc.Bytes())
+		if !meta.OmitEmpty || value != "" {
+			metadata[name] = value
+		}
+	}
 
-    return metadata, nil
+	return metadata, nil
 }

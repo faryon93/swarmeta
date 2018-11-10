@@ -1,4 +1,4 @@
-package model
+package main
 
 // swarmeta - docker swarm service metadata
 // Copyright (C) 2018 Maximilian Pachl
@@ -17,22 +17,47 @@ package model
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // ---------------------------------------------------------------------------------------
-//  imports
+//  global variables
 // ---------------------------------------------------------------------------------------
 
-import (
-	"text/template"
+var (
+	// release information
+	AppName    = "swarmeta"
+	AppVersion = "1.0"
+
+	// filled by build tool
+	GitCommit   string
+	GitBranch   string
+	BuildTime   string
+	BuildNumber string
 )
 
 // ---------------------------------------------------------------------------------------
-//  types
+//  public functions
 // ---------------------------------------------------------------------------------------
 
-type Metadata struct {
-	// populated by hcl
-	TemplateSrc string `hcl:"template"`
-	OmitEmpty   bool   `hcl:"omit_empty"`
+// Returns the application version string.
+func GetAppVersion() string {
+	str := AppName + " " + AppVersion
+	if len(BuildNumber) > 0 {
+		str += "-" + BuildNumber
+	}
 
-	// internal variables
-	template *template.Template `hcl:"-"`
+	if len(GitCommit) > 0 {
+		str += " (#" + GitCommit
+	}
+
+	if len(GitBranch) > 0 {
+		str += "-" + GitBranch
+	}
+
+	if len(BuildTime) > 0 {
+		str += " / " + BuildTime + ")"
+	} else {
+		if len(GitCommit) > 0 {
+			str += ")"
+		}
+	}
+
+	return str
 }

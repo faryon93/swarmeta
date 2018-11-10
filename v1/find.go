@@ -23,7 +23,7 @@ package v1
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 
@@ -75,7 +75,7 @@ func Find(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get(QueryFollow) == "" {
 		services, err := renderMeta(docker, view, filter)
 		if err != nil {
-			log.Println("failed to fetch service list:", err.Error())
+			logrus.Errorln("failed to fetch service list:", err.Error())
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -97,7 +97,7 @@ func Find(w http.ResponseWriter, r *http.Request) {
 		swarm.ForEachServiceEvent(docker, ctx, func(events.Message) {
 			services, err := renderMeta(docker, view, filter)
 			if err != nil {
-				log.Println("failed to fetch service list:", err.Error())
+				logrus.Errorln("failed to fetch service list:", err.Error())
 				cancel()
 				return
 			}
@@ -105,7 +105,7 @@ func Find(w http.ResponseWriter, r *http.Request) {
 			// transform to json
 			buf, err := json.Marshal(services)
 			if err != nil {
-				log.Println("failed to transform json:", err.Error())
+				logrus.Errorln("failed to transform json:", err.Error())
 				cancel()
 				return
 			}
