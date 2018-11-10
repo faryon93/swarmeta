@@ -33,6 +33,7 @@ RUN apk --update --no-cache add ca-certificates tzdata bash su-exec curl
 
 # add relevant files to container
 COPY --from=builder /tmp/swarmeta /usr/sbin/swarmeta
+ADD swarmeta.hcl ./
 
 # make binary executable
 RUN chown nobody:nobody /usr/sbin/swarmeta && \
