@@ -98,6 +98,7 @@ func main() {
 	// setup http connection
 	ctx := v1.Context{Conf: &config, Docker: docker}
 	http.HandleFunc("/api/v1/find", ctx.With(v1.Find))
+	http.HandleFunc("/api/v1/health", ctx.With(v1.Health))
 	srv := &http.Server{Addr: ":8000"}
 	go func() {
 		logrus.Println("http server is listening on :8000")
