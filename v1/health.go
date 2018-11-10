@@ -45,6 +45,7 @@ func Health(w http.ResponseWriter, r *http.Request) {
 	// try docker
 	_, err := Ctx(r).Docker.Ping(r.Context())
 	if err != nil {
+		logrus.Errorln("healthcheck failed:", err.Error())
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}

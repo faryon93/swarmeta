@@ -44,7 +44,6 @@ import (
 
 const (
 	HttpCloseTimeout = 100 * time.Millisecond
-	ConfigName       = "swarmeta.hcl"
 )
 
 // ---------------------------------------------------------------------------------------
@@ -54,7 +53,9 @@ const (
 func main() {
 	var err error
 	var colors bool
+	var configFile string
 	flag.BoolVar(&colors, "colors", false, "force color logging")
+	flag.StringVar(&configFile, "conf", "swarmeta.hcl", "config file path")
 	flag.Parse()
 
 	// setup logger
@@ -65,7 +66,7 @@ func main() {
 	logrus.Infoln("starting", GetAppVersion())
 
 	// read and decode the configureation file
-	buf, err := ioutil.ReadFile(ConfigName)
+	buf, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		logrus.Errorln("failed to read config file:", err.Error())
 		os.Exit(-1)

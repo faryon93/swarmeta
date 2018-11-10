@@ -174,7 +174,7 @@ func renderMeta(dock *client.Client, vw *model.View, filt filters.Args) ([]meta,
 	// transform the service list according to the view definition
 	services := make([]meta, len(list))
 	for i, service := range list {
-		services[i], err = vw.Render(&service.Spec)
+		services[i], err = vw.Render(&service)
 		if err != nil {
 
 			return nil, err
