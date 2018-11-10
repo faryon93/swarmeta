@@ -92,6 +92,7 @@ func Find(w http.ResponseWriter, r *http.Request) {
 
 		// everytime a service is updated/created/deleted
 		// the list is sent to the client
+		// TODO: wouldn't it be better to just have one central event listener?
 		lastHash := uint64(0)
 		ctx, cancel := context.WithCancel(r.Context())
 		swarm.ForEachServiceEvent(docker, ctx, func(events.Message) {

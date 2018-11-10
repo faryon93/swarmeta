@@ -43,7 +43,7 @@ import (
 // ---------------------------------------------------------------------------------------
 
 const (
-	HttpCloseTimeout = 5 * time.Second
+	HttpCloseTimeout = 100 * time.Millisecond
 	ConfigName       = "swarmeta.hcl"
 )
 
